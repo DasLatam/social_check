@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificador de Nombres Sociales v1.1</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Verificador de Nombres Sociales 🚀</h1>
+            <p>Ingresa el nombre de tu marca, te sugeriremos nombres de usuario y comprobaremos su disponibilidad.</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <input type="text" id="businessName" placeholder="Ej: MCV Propiedades">
+                <button id="generateButton">Generar y Verificar</button>
+            </div>
+
+            <div id="results" class="hidden">
+                <h2>Sugerencias de Usuario</h2>
+                <p class="disclaimer">Los resultados automáticos son una guía. Un resultado "No Disponible" puede significar que el nombre está en uso o que la red social bloqueó la comprobación. Haz clic para verificar manualmente.</p>
+                <div id="suggestionsContainer">
+                    </div>
+            </div>
+
+             <div id="no-results" class="hidden">
+                <p>Por favor, ingresa un nombre para generar sugerencias.</p>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Verificador de Nombres Sociales v1.1</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
