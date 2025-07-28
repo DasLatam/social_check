@@ -79,31 +79,43 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsDiv.classList.remove('hidden');
     }
 
-    async function checkAvailability(button) {
-        const { username, platform, url } = button.dataset;
-        
-        try {
-            const response = await fetch(`checker.php?platform=${platform}&username=${username}`);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            const data = await response.json();
+    async function checkAvailability(platform) {
+    const button = document.getElementById(`${platform}-check-btn`);
+    button.disabled = true;
+    button.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...`;
+    button.className = 'social-check-btn status-loading';
 
-            button.disabled = false;
-            
-            if (data.status === 'available') {
-                button.className = 'social-check-btn status-available';
-                button.innerHTML = `✅ Disponible en ${platform}`;
-            } else {
-                button.className = 'social-check-btn status-unavailable';
-                button.innerHTML = `🔴 No Disponible en ${platform}`;
-            }
-
-        } catch (error) {
-            console.error('Error checking:', platform, error);
-            button.className = 'social-check-btn status-manual';
-            button.innerHTML = `⚠️ Error. Verificar`;
-            button.disabled = false;
+    try {
+        const response = await fetch(`/check/${platform}`);
+        // Check if the response is successful (status code 2xx)
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
+        // Check if the response content type is JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+            // Handle cases where the response is not JSON (e.g., an HTML error page)
+             throw new TypeError("Expected JSON response, but received " + contentType);
+        }
+        const data = await response.json();
 
-        button.onclick = () => window.open(`${url}${username}`, '_blank');
+        if (data.available) {
+            button.className = 'social-check-btn status-available';
+            button.innerHTML = `✅ Disponible`;
+        } else {
+            button.className = 'social-check-btn status-unavailable';
+            button.innerHTML = `❌ No disponible`;
+        }
+    } catch (error) {
+        // This catch block will handle both network errors and JSON parsing errors
+        console.error('Error checking:', platform, error);
+        button.className = 'social-check-btn status-manual';
+        button.innerHTML = `⚠️ Error. Verificar`;
+    } finally {
+        // Ensure the button is re-enabled even if there's an error
+        button.disabled = false;
     }
+}
+
+
 });
